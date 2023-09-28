@@ -1,9 +1,14 @@
 var express = require('express');
 var router = express.Router();
-const superAdminServices = require('../services/userServices');
+const userServices = require('../services/userServices');
+const { authRole, role, verifyToken } = require('../config/auth');
 
-router.get('/', function (req, res, next) {
-  res.render('index', { title: 'Express' });
+router.get(
+  '/feeds',
+  verifyToken,
+  authRole([role.USER]), 
+  (req, res) => {
+  userServices.feeds(req, res);
 });
 
 module.exports = router;

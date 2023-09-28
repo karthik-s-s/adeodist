@@ -1,9 +1,24 @@
 var express = require('express');
 var router = express.Router();
-const superAdminServices = require('../services/adminServices');
+const adminServices = require('../services/adminServices');
+const { authRole, role, verifyToken } = require('../config/auth');
 
-router.get('/', function (req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+router.post(
+  '/feed',
+  verifyToken,
+  authRole([role.SUPERADMIN, role.ADMIN]),
+  (req, res) => {
+    adminServices.createFeed(req, res);
+  }
+);
+
+router.delete(
+  '/feed',
+  verifyToken,
+  authRole([role.SUPERADMIN, role.ADMIN]),
+  (req, res) => {
+    adminServices.deleteFeed(req, res);
+  }
+);
 
 module.exports = router;
