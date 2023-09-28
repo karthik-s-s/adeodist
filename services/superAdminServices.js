@@ -3,7 +3,7 @@ const sql = require('../config/sqlConstraints');
 const { createSession } = require('../config/auth');
 const crypto = require('crypto');
 var path = require('path');
-const fs = require('fs');
+const fs = require('fs-extra');
 
 module.exports.login = async (req, res, auth) => {
   console.log('Entering login req.body:', req.body);
@@ -130,7 +130,25 @@ module.exports.logs = async (req, res, auth) => {
   console.log('Entering logs');
   let input = req.body;
   try {
-   
+    console.log(__dirname);
+    const logDirectory = path.join(__dirname, '..', 'logs');
+    console.log(logDirectory);
+
+    const currentTime = Date.now();
+    const fiveMinutesAgo = currentTime - 5 * 60 * 1000; // 5 minutes in milliseconds
+    const recentLogs = fs.readdirSync(logDirectory)
+      .filter((file) => {
+        const filePath = `${logDirectory}/${file}`;
+        const fileStat = fs.statSync(filePath);
+        const fileCreationTime = fileStat.ctime.getTime();
+        return fileCreationTime >= fiveMinutesAgo;
+      })
+      .map((file) => {
+        const filePath = `${logDirectory}/${file}`;
+        return fs.readFileSync(filePath, 'utf8');
+      });
+  
+    res.send(recentLogs.join('\n'));
     
   } catch (e) {
     console.log('error', e);

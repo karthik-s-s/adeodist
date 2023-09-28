@@ -4,7 +4,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 //const fs = require('fs');
 const fs = require('fs-extra');
-const cron = require('cron');
+const cron = require('node-cron');
 require('dotenv').config();
 
 
@@ -63,6 +63,28 @@ function generateLogFileName(time = new Date()) {
   return `${logDirectory}/log_${year}${month}${day}_${hour}${minuteStr}.txt`;
 }
 //end
+
+// Schedule log cleanup task (every 30 seconds)
+cron.schedule('*/30 * * * * *', () => {
+  //'*/30 * * * * *' runs every 30 seconds.
+  //'0 */30 * * * *' runs every 30 minutes.
+  console.log('Running cron job');
+  const files = fs.readdirSync(logDirectory);
+
+  files.forEach((file) => {
+    const filePath = `${logDirectory}/${file}`;
+    const fileStat = fs.statSync(filePath);
+    const currentTime = Date.now();
+    const fileCreationTime = fileStat.ctime.getTime();
+
+    if (currentTime - fileCreationTime > 30  *1000) {
+      console.log("unlink");
+      fs.unlinkSync(filePath);
+    }
+  });
+});
+
+// end
 
 app.use('/user', userRouter);
 app.use('/admin', adminRouter);
