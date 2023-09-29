@@ -28,7 +28,6 @@ function verifyToken(req, res, next) {
 }
 
 function authRole(allowedRoles) {
-  console.log(allowedRoles);
   return (req, res, next) => {
     // Check if the user's role is in the allowedRoles array
     if (!allowedRoles.includes(req.user.role)) {

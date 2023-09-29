@@ -52,7 +52,6 @@ module.exports.createUser = async (req, res, auth) => {
       .createHash('sha256')
       .update(input.password)
       .digest('hex');
-    console.log(req.user.role);
     if (req.user.role == 'admin' && input.role == 'admin') {
       return res
         .status(403)
@@ -130,9 +129,7 @@ module.exports.logs = async (req, res, auth) => {
   console.log('Entering logs');
   let input = req.body;
   try {
-    console.log(__dirname);
     const logDirectory = path.join(__dirname, '..', 'logs');
-    console.log(logDirectory);
 
     const currentTime = Date.now();
     const fiveMinutesAgo = currentTime - 5 * 60 * 1000; // 5 minutes in milliseconds
