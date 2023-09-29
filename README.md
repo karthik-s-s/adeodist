@@ -107,6 +107,16 @@ The application fulfills the following requirements:
 
 ---
 
+## Google Drive Folder
+[Google Drive Folder (Contains the following resources)](https://drive.google.com/drive/folders/1-ctkKJYPoFfP_er89J75eETbs80yMV4q?usp=sharing)
+
+- ER Diagram
+- Postman Collection
+- Functionality Video
+- Credentials and Database Creation Code
+
+---
+
 ## Future Enhancements
 
 - Implement front-end for better user interaction.
