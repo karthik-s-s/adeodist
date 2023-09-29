@@ -30,7 +30,7 @@ module.exports.deleteFeed = async (req, res) => {
         [req.user.id, feedId]
       );
       console.log(userFeedMapping.length);
-      if (userFeedMapping.length < 0) {
+      if (userFeedMapping.length <= 0) {
         return res.status(401).json({
           status: true,
           msg: "You don't have permission to perform this action",
@@ -39,7 +39,7 @@ module.exports.deleteFeed = async (req, res) => {
 
       //admin can only delete the feed which they have access to
     }
-    //await mySqlPool.query(sql.sqlQuery.dropFeed,[feedId,feedId]);
+    await mySqlPool.query(sql.sqlQuery.dropFeed,[feedId,feedId]);
     console.log('Exiting from deleteFeed successfully');
     res.json({ status: true, msg: 'Deleted' });
   } catch (e) {
